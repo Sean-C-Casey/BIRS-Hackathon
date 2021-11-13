@@ -5,17 +5,13 @@ import json
 import pandas as pd
 
 
-def fetch_div_legislators():
-    querystring = {
-        
-    }
-
+def fetch_div_legislators_by_province(province, parameters):
+    querystring = parameters
     headers = {
         'x-rapidapi-host': API_HOST,
         'x-rapidapi-key': API_KEY
     }
-    url = API_BASE_URL + API_DIV_LEGISLATORS + "/ca/qc"
-    # print(url)
+    url = API_BASE_URL + API_DIV_LEGISLATORS + "/ca/" + province + "?limit=100"
 
     response = requests.get(url, headers=headers, params=querystring)
     resp_dict = json.loads(response.text)
@@ -27,11 +23,23 @@ def fetch_div_legislators():
         resp_dict = json.loads(response.text)
         json_data.extend(resp_dict["data"])
         pagination = resp_dict["pagination"]
-    # print(resp_dict["pagination"])
-    data = pd.json_normalize(json_data)
-    print(data)
-    print(data.columns)
+    return json_data
+
+
+def fetch_div_legislators(parameters={}):
+    provinces = (
+        "ab", "bc", "mb", "nb", "nl", "ns", "nt", 
+        "nu", "on", "pe", "qc", "sk", "yt"
+    )
+    data = []
+    for prov in provinces:
+        result = fetch_div_legislators_by_province(prov, parameters)
+        data.extend(result)
+    return pd.json_normalize(data)
 
 
 if __name__ == "__main__":
-    fetch_div_legislators()
+    params = {
+        "party": "Liberal"
+    }
+    fetch_div_legislators(params)

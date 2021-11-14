@@ -249,7 +249,7 @@ def main(app):
                 style={"width": 500}
             ),
             dcc.Graph(id="gender_plot")
-        [
+        ]
     )  
           
     # Full Layout

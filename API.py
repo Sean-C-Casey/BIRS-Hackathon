@@ -37,6 +37,38 @@ def fetch_div_legislators(parameters={}):
         data.extend(result)
     return pd.json_normalize(data)
 
+def fetch_div_legislation_by_province(province, parameters):
+    querystring = parameters
+    headers = {
+        'x-rapidapi-host': API_HOST,
+        'x-rapidapi-key': API_KEY
+    }
+    url = API_BASE_URL + API_DIV_LEGISLATION + "/ca/" + province + "?limit=100"
+
+    response = requests.get(url, headers=headers, params=querystring)
+    resp_dict = json.loads(response.text)
+    json_data = resp_dict["data"]
+    pagination = resp_dict["pagination"]
+    while pagination["next_url"]:
+        url = API_BASE_URL + pagination["next_url"]
+        response = requests.get(url, headers=headers, params=querystring)
+        resp_dict = json.loads(response.text)
+        json_data.extend(resp_dict["data"])
+        pagination = resp_dict["pagination"]
+    return json_data
+
+
+def fetch_div_legislation(parameters={}):
+    provinces = (
+        "ab", "bc", "mb", "nb", "nl", "ns", "nt", 
+        "nu", "on", "pe", "qc", "sk", "yt"
+    )
+    data = []
+    for prov in provinces:
+        result = fetch_div_legislation_by_province(prov, parameters)
+        data.extend(result)
+    return pd.json_normalize(data)
+
 
 if __name__ == "__main__":
     params = {

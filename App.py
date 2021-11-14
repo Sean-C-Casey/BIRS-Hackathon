@@ -10,7 +10,7 @@ import plotly.express as px
 from layout.banner import BANNER
 from layout.footer import FOOTER
 from API import fetch_div_legislators
-from Data import Legislators
+from Data import Legislators, Legislation
 
 
 # APP
@@ -48,16 +48,37 @@ def gender_by_party_graph(party):
     }
     return fig
 
+# Bill by Province Pie Chart
+@app.callback(Output('province_bill_pie', 'figure'),
+            [Input('province_dropdown', 'value')])
+
+def province_bill_pie_chart(selected_dropdown_value):
+    df = Legislation.data
+    new_data = df[-df['topic'].isnull()]
+    new_data = new_data[-new_data['province_territory'].isnull()]
+    df_plot = df[df['province_territory'] == selected_dropdown_value]
+    labels=df_plot['topic'].value_counts().index
+    values=list(df_plot['topic'].value_counts())
+    figure = px.pie(df_plot,values=values,names=labels,hole=0.3,color_discrete_sequence=px.colors.sequential.RdBu)
+    return figure
+
 
 
 def main(app):
   
     ############ DATA ################
     
-    # Legislators Data
+    # Fetch Data
     Legislators.fetch_data()
+    Legislation.fetch_data()
+
+    
+    # Get Parties to make Dropdowns
     parties = Legislators.data["party"].unique()
     parties.sort()
+    provinces = Legislation.data["province_territory"].unique()
+    provinces.sort()
+
   
     ############# LAYOUT ###############
     
@@ -67,24 +88,96 @@ def main(app):
         html.P(
             "A little bit of explanatory text goes here if we want it. A little bit of explanatory text goes here if we want it. A little bit of explanatory text goes here if we want it.",
             className="text-italic font-weight-light",
-            style = {"padding-top" : 90}
+            style = {"padding-top" : 40}
         ),
+        #pie viz
+        dcc.Graph(id="province_bill_pie"),
         # Sean's Face
         html.Img(
             src="https://media-exp1.licdn.com/dms/image/C5603AQF_Bbc8OPJppA/profile-displayphoto-shrink_400_400/0/1577748302235?e=1642636800&v=beta&t=S9VLy1dZK_haPe9-IJY2EJ3VlDxPT2dggsmMFzRli64",
             className = "rounded-circle img-fluid",
             height= "auto",
-            style = {"padding-top" : 45}
+            style = {"padding-top" : 10}
         ),
         html.P(
             '"...change starts with you and I."',
             style = {"font-style" : "italic",
                      "text-align" : "center",
-                     "padding-top" : 50}
+                     "padding-top" : 40}
         )
     ]
     
-    # Single Select Card
+    # Select Province Card
+    dropdown_province_selection_card = dbc.Col(
+        dbc.Card(
+            className = "border-2 border-primary h-100",
+            children = html.Div(
+                className = "card-body",
+                children = [
+                    html.Div(
+                        html.H5(
+                            "Province",
+                            className = "card-title text-light"
+                        ),
+                        style = {"padding" : 5, "padding-left" : 10},
+                        className = "bg-primary rounded-top" 
+                    ),
+                    dbc.Label(
+                        "Select Province to Display:",
+                        className="card-text"
+                    ),
+                    dbc.Row(
+                        dbc.Select(
+                            id = "province_dropdown",
+                            options = [
+                                {"label": value, "value": value} for value in provinces
+                            ]
+                        ),
+                        justify = "center",
+                    )
+                ]
+            )
+        ),
+        width = "auto",
+        align = "stretch"
+    )
+
+    # Select Party Card
+    dropdown_gender_by_party_card = dbc.Col(
+        dbc.Card(
+            className = "border-2 border-primary h-100",
+            children = html.Div(
+                className = "card-body",
+                children = [
+                    html.Div(
+                        html.H5(
+                            "Political Party",
+                            className = "card-title text-light"
+                        ),
+                        style = {"padding" : 5, "padding-left" : 10},
+                        className = "bg-primary rounded-top" 
+                    ),
+                    dbc.Label(
+                        "Select Party to Display:",
+                        className="card-text"
+                    ),
+                    dbc.Row(
+                        dbc.Select(
+                            id = "party_dropdown",
+                            options = [
+                                {"label": value, "value": value} for value in parties
+                            ]
+                        ),
+                        justify = "center",
+                    )
+                ]
+            )
+        ),
+        width = "auto",
+        align = "stretch"
+    )
+
+    # Single Select Card PLACEHOLDER
     single_select_card = dbc.Col(
         dbc.Card(
             className = "border-2 border-primary h-100",
@@ -130,7 +223,7 @@ def main(app):
         align = "stretch"
     )
     
-    # Multi-Select Card
+    # Multi-Select Card PLACEHOLDER
     multi_select_card = dbc.Col(
         dbc.Card(
             className = "border-2 border-primary h-100",
@@ -174,42 +267,7 @@ def main(app):
         width = "auto",
         align = "stretch"
     )
-    
-    # Gender By Party Dropdown Card
-    dropdown_gender_by_party_card = dbc.Col(
-        dbc.Card(
-            className = "border-2 border-primary h-100",
-            children = html.Div(
-                className = "card-body",
-                children = [
-                    html.Div(
-                        html.H5(
-                            "Political Party",
-                            className = "card-title text-light"
-                        ),
-                        style = {"padding" : 5, "padding-left" : 10},
-                        className = "bg-primary rounded-top" 
-                    ),
-                    dbc.Label(
-                        "Select Party to Display:",
-                        className="card-text"
-                    ),
-                    dbc.Row(
-                        dbc.Select(
-                            id = "party_dropdown",
-                            options = [
-                                {"label": value, "value": value} for value in parties
-                            ]
-                        ),
-                        justify = "center",
-                    )
-                ]
-            )
-        ),
-        width = "auto",
-        align = "stretch"
-    )
-              
+
     # Full Layout
     app_layout = dbc.Container(
         [
@@ -231,7 +289,7 @@ def main(app):
                     # Content
                     dbc.Col(
                         children = [
-                            # Visualization
+                            # Gender Visualization
                             dcc.Graph(id="gender_plot"),
                             # Cards
                             dbc.Row(
@@ -242,6 +300,7 @@ def main(app):
                                     # multi_select_card,
                                     # Card for Drop Down List
                                     dropdown_gender_by_party_card,
+                                    dropdown_province_selection_card
                                 ],
                             ),
                             # Footer

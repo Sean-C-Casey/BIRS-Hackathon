@@ -87,13 +87,13 @@ def main(app):
                 children = [
                     html.Div(
                         html.H5(
-                            "Stocks",
+                            "PLACEHOLDER",
                             className = "card-title text-light"
                         ),
                         style = {"padding" : 5, "padding-left" : 10},
                         className = "bg-primary rounded-top"                                ),
                     dbc.Label(
-                        "Single Selector:",
+                        "Some placeholder single-category card:",
                         className="card-text"
                     ),
                     dbc.Row(
@@ -133,14 +133,14 @@ def main(app):
                 children = [
                     html.Div(
                         html.H5(
-                            "Stocks2",
+                            "PLACEHOLDER",
                             className = "card-title text-light"
                         ),
                         style = {"padding" : 5, "padding-left" : 10},
                         className = "bg-primary rounded-top" 
                     ),
                     dbc.Label(
-                        "Multi-Selector:",
+                        "Some multi-selector category:",
                         className="card-text"
                     ),
                     dbc.Row(

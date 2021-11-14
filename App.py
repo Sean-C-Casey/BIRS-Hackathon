@@ -17,7 +17,7 @@ app = dash.Dash()
 )
 def gender_by_party_graph(party):
     # print(party)
-    data = Legislators.data.query("party == '%s'" % party)
+    data = Legislators.data.query('party == "%s"' % party)
     # print(data)
     genders = data["gender"].unique()
     for i in range(len(genders)):

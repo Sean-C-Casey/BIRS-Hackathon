@@ -19,31 +19,7 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY], title="Doug 
 
 ################# CALLBACKS AND GRAPHS ####################
 
-# Default Example Visualization
-@app.callback(
-    Output(component_id="stock_plot", component_property="figure"),
-    [Input(component_id="radios", component_property="value")]
-)
-def update_graph(dropdown_value):
-    if not dropdown_value:
-        dropdown_value = "GOOG"
-    data = px.data.stocks()
-    fig = go.Figure([
-        go.Scatter(
-            x=data["date"], 
-            y=data[dropdown_value], 
-            line={"color": "firebrick", "width": 4}
-        )
-    ])
-    fig.update_layout(
-        title="Stock Prices over Time",
-        xaxis_title="Dates",
-        yaxis_title="Prices"
-    )
-    return fig
- 
-
-# Legislature Visualization
+# Gender by Party Visualization
 @app.callback(
     Output(component_id="gender_plot", component_property="figure"),
     [Input(component_id="party_dropdown", component_property="value")]
@@ -111,13 +87,13 @@ def main(app):
                 children = [
                     html.Div(
                         html.H5(
-                            "Stocks",
+                            "PLACEHOLDER",
                             className = "card-title text-light"
                         ),
                         style = {"padding" : 5, "padding-left" : 10},
                         className = "bg-primary rounded-top"                                ),
                     dbc.Label(
-                        "Single Selector:",
+                        "Some placeholder single-category card:",
                         className="card-text"
                     ),
                     dbc.Row(
@@ -157,14 +133,14 @@ def main(app):
                 children = [
                     html.Div(
                         html.H5(
-                            "Stocks2",
+                            "PLACEHOLDER",
                             className = "card-title text-light"
                         ),
                         style = {"padding" : 5, "padding-left" : 10},
                         className = "bg-primary rounded-top" 
                     ),
                     dbc.Label(
-                        "Multi-Selector:",
+                        "Some multi-selector category:",
                         className="card-text"
                     ),
                     dbc.Row(
@@ -193,8 +169,8 @@ def main(app):
         align = "stretch"
     )
     
-    # Dropdown Card
-    dropdown_card = dbc.Col(
+    # Gender By Party Dropdown Card
+    dropdown_gender_by_party_card = dbc.Col(
         dbc.Card(
             className = "border-2 border-primary h-100",
             children = html.Div(
@@ -202,24 +178,21 @@ def main(app):
                 children = [
                     html.Div(
                         html.H5(
-                            "Stocks3",
+                            "Political Party",
                             className = "card-title text-light"
                         ),
                         style = {"padding" : 5, "padding-left" : 10},
                         className = "bg-primary rounded-top" 
                     ),
                     dbc.Label(
-                        "Dropdown Selector:",
+                        "Select Canadian Party to Include:",
                         className="card-text"
                     ),
                     dbc.Row(
                         dbc.Select(
-                            id = "dropdown-select",
+                            id = "party_dropdown",
                             options = [
-                                        {"label" : "Google", "value" : "GOOG"},
-                                        {"label" : "Apple", "value" : "AAPL"},
-                                        {"label" : "Amazon", "value" : "AMZN"},
-                                        {"label" : "None", "value" : None},
+                                {"label": value, "value": value} for value in parties
                             ]
                         ),
                         justify = "center",
@@ -230,28 +203,7 @@ def main(app):
         width = "auto",
         align = "stretch"
     )
-    
-    # Legislature Viz Section
-    legislature_vis_section = html.Div(
-        id="parent",
-        children=[
-            html.H1(
-                id="H1", 
-                children="Styling using HTML components",
-                style={'textAlign':'center', 'marginTop':40,'marginBottom':40}
-            ),
-            dcc.Dropdown(
-                id="party_dropdown",
-                options=[
-                    {"label": value, "value": value} for value in parties
-                ],
-                value="Green",
-                style={"width": 500}
-            ),
-            dcc.Graph(id="gender_plot")
-        ]
-    )  
-          
+              
     # Full Layout
     app_layout = dbc.Container(
         [
@@ -274,20 +226,18 @@ def main(app):
                     dbc.Col(
                         children = [
                             # Visualization
-                            dcc.Graph(id="stock_plot"),
+                            dcc.Graph(id="gender_plot"),
                             # Cards
                             dbc.Row(
                                 justify = "center",
                                 className = "d-flex flex-fill",
                                 children = [
-                                    single_select_card,
-                                    multi_select_card,
+                                    # single_select_card,
+                                    # multi_select_card,
                                     # Card for Drop Down List
-                                    dropdown_card,
+                                    dropdown_gender_by_party_card,
                                 ],
                             ),
-                            # Temp Legislature Viz Section
-                            legislature_vis_section,
                             # Footer
                             dbc.Row(style = {"padding" : 40}),
                             FOOTER  

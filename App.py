@@ -2,37 +2,48 @@ import dash
 from dash import html
 from dash import dcc
 from dash.dependencies import Input, Output
+import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
+from API import fetch_div_legislators
+from Data import Legislators
 
 
 app = dash.Dash()
 
 @app.callback(
-    Output(component_id="stock_plot", component_property="figure"),
-    [Input(component_id="dropdown", component_property="value")]
+    Output(component_id="gender_plot", component_property="figure"),
+    [Input(component_id="party_dropdown", component_property="value")]
 )
-def update_graph(dropdown_value):
-    if not dropdown_value:
-        dropdown_value = "GOOG"
-    data = px.data.stocks()
-    print(dropdown_value)
-    fig = go.Figure([
-        go.Scatter(
-            x=data["date"], 
-            y=data[dropdown_value], 
-            line={"color": "firebrick", "width": 4}
-        )
-    ])
-    fig.update_layout(
-        title="Stock Prices over Time",
-        xaxis_title="Dates",
-        yaxis_title="Prices"
-    )
+def gender_by_party_graph(party):
+    # print(party)
+    data = Legislators.data.query("party == '%s'" % party)
+    # print(data)
+    genders = data["gender"].unique()
+    for i in range(len(genders)):
+        if not genders[i]:
+            genders[i] = "Unspecified"
+    new_data = {
+        "Gender": genders,
+        "Count": [data.query("gender == '%s'" % gender).count()["name_full"] for gender in genders]
+    }
+    new_data_frame = pd.DataFrame(data=new_data)
+    print(new_data)
+    fig = {
+        "data": [
+            {"x": new_data_frame["Gender"], "y": new_data_frame["Count"], 'type': 'bar'}
+        ],
+        "layout": {
+            "title": "Gender Count for %s Party" % party
+        }
+    }
     return fig
 
 
 def main(app):
+    Legislators.fetch_data()
+    parties = Legislators.data["party"].unique()
+    parties.sort()
     app.layout = html.Div(
         id="parent",
         children=[
@@ -42,16 +53,15 @@ def main(app):
                 style={'textAlign':'center', 'marginTop':40,'marginBottom':40}
             ),
             dcc.Dropdown(
-                id="dropdown",
+                id="party_dropdown",
                 options=[
-                    {"label": "Google", "value": "GOOG"},
-                    {"label": "Apple", "value": "AAPL"},
-                    {"label": "Amazon", "value": "AMZN"}
+                    {"label": value, "value": value} for value in parties
                 ],
-                value="GOOG",
-                style={"width": 200}
+                value="Green",
+                style={"width": 500}
             ),
-            dcc.Graph(id="stock_plot")
+            dcc.Graph(id="gender_plot")
+
         ]
     )
     app.css.append_css({

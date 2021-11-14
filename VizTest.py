@@ -11,8 +11,19 @@ import plotly.express as px
 import pandas as pd
 from dash.dependencies import Input, Output
 
-df = pd.read_csv("/Users/14187/Documents/MDS/RANDOM/HACKATHON/TEST/temp.csv", index_col=0, encoding = "ISO-8859-1")
+###
+
+import dash_bootstrap_components as dbc
+from layout.banner import BANNER
+from layout.footer import FOOTER
+from API import fetch_div_legislators
+from Data import Legislators
+
+Legislators.fetch_data()
+df = Legislators.data
+
 new_data = df[-df['gender'].isnull()]
+
 df_active_mp = new_data[new_data['is_active'] == True]
 
 
@@ -49,7 +60,8 @@ app.layout = html.Div(children = [
 def update_histogram(selected_dropdown_value):
     #print(selected_dropdown_value)
     df_plot = df_active_mp[df_active_mp['province_territory'] == selected_dropdown_value]
-    figure = px.histogram(df_plot, x='party', color = 'gender', barmode='group',
+    figure = px.histogram(df_plot, x='party', color = 'gender', barmode='group', 
+                                
                                 
                                 title = f"Distribution of gender for active MP's in {selected_dropdown_value}",
                                 template = "simple_white")

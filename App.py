@@ -67,7 +67,7 @@ def main(app):
         html.P(
             "A little bit of explanatory text goes here if we want it. A little bit of explanatory text goes here if we want it. A little bit of explanatory text goes here if we want it.",
             className="text-italic font-weight-light",
-            style = {"padding-top" : 100}
+            style = {"padding-top" : 90}
         ),
         # Sean's Face
         html.Img(

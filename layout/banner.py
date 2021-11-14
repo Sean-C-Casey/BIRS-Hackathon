@@ -5,29 +5,26 @@ import dash_bootstrap_components as dbc
 
 BANNER = dbc.Navbar(
     dbc.Container(
-        children = dbc.Row(
-            justify = "between",
-            children = [
+        children=dbc.Row(
+            justify="between",
+            children=[
                 dbc.Col(
                     html.A(
                         html.Img(
                             src="assets/icon.png",
-                            height = "50px",
+                            height="50px",
                         ),
-                        href="#"
+                        href="#",
                     )
                 ),
                 dbc.Col(
-                    html.H2(
-                        "Diversity in Politics", 
-                        className="text-light"
-                            ),
-                    width = "auto"
+                    html.H2("Everybody Everywhere", className="text-light"),
+                    width="auto",
                 ),
             ],
         )
     ),
     color="primary",
-    dark = True,
-    fixed = "top"
+    dark=True,
+    fixed="top",
 )

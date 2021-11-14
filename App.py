@@ -14,7 +14,7 @@ from Data import Legislators
 
 
 # APP
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY], title="Doug Vs Judy")
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY], title="Gender Diversity in Legislation")
 
 
 ################# CALLBACKS AND GRAPHS ####################
@@ -67,14 +67,20 @@ def main(app):
         html.P(
             "A little bit of explanatory text goes here if we want it. A little bit of explanatory text goes here if we want it. A little bit of explanatory text goes here if we want it.",
             className="text-italic font-weight-light",
-            style = {"padding-top" : 96}
+            style = {"padding-top" : 90}
         ),
         # Sean's Face
         html.Img(
             src="https://media-exp1.licdn.com/dms/image/C5603AQF_Bbc8OPJppA/profile-displayphoto-shrink_400_400/0/1577748302235?e=1642636800&v=beta&t=S9VLy1dZK_haPe9-IJY2EJ3VlDxPT2dggsmMFzRli64",
             className = "rounded-circle img-fluid",
             height= "auto",
-            style = {"padding-top" : 20}
+            style = {"padding-top" : 45}
+        ),
+        html.P(
+            '"...change starts with you and I."',
+            style = {"font-style" : "italic",
+                     "text-align" : "center",
+                     "padding-top" : 50}
         )
     ]
     
@@ -185,7 +191,7 @@ def main(app):
                         className = "bg-primary rounded-top" 
                     ),
                     dbc.Label(
-                        "Select Canadian Party to Include:",
+                        "Select Party to Display:",
                         className="card-text"
                     ),
                     dbc.Row(

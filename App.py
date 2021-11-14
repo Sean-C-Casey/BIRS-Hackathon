@@ -3,17 +3,23 @@ from dash import html
 from dash import dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
-from dash_bootstrap_components._components.Alert import Alert
-from dash_bootstrap_components._components.Col import Col
+import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
+
 from layout.banner import BANNER
 from layout.footer import FOOTER
+from API import fetch_div_legislators
+from Data import Legislators
 
 
-
+# APP
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY], title="Doug Vs Judy")
 
+
+################# CALLBACKS AND GRAPHS ####################
+
+# Default Example Visualization
 @app.callback(
     Output(component_id="stock_plot", component_property="figure"),
     [Input(component_id="radios", component_property="value")]
@@ -35,20 +41,59 @@ def update_graph(dropdown_value):
         yaxis_title="Prices"
     )
     return fig
+ 
+
+# Legislature Visualization
+@app.callback(
+    Output(component_id="gender_plot", component_property="figure"),
+    [Input(component_id="party_dropdown", component_property="value")]
+)
+def gender_by_party_graph(party):
+    # print(party)
+    data = Legislators.data.query('party == "%s"' % party)
+    # print(data)
+    genders = data["gender"].unique()
+    for i in range(len(genders)):
+        if not genders[i]:
+            genders[i] = "Unspecified"
+    new_data = {
+        "Gender": genders,
+        "Count": [data.query("gender == '%s'" % gender).count()["name_full"] for gender in genders]
+    }
+    new_data_frame = pd.DataFrame(data=new_data)
+    print(new_data)
+    fig = {
+        "data": [
+            {"x": new_data_frame["Gender"], "y": new_data_frame["Count"], 'type': 'bar'}
+        ],
+        "layout": {
+            "title": "Gender Count for %s Party" % party
+        }
+    }
+    return fig
 
 
 
 def main(app):
+  
+    ############ DATA ################
     
+    # Legislators Data
+    Legislators.fetch_data()
+    parties = Legislators.data["party"].unique()
+    parties.sort()
+  
     ############# LAYOUT ###############
     
     # Sidebar
     sidebar = [
+        # Sidebar Placeholder Explanatory Text
         html.P(
             "A little bit of explanatory text goes here if we want it. A little bit of explanatory text goes here if we want it. A little bit of explanatory text goes here if we want it.",
             className="text-italic font-weight-light",
             style = {"padding-top" : 96}
         ),
+        # Sean's Face
         html.Img(
             src="https://media-exp1.licdn.com/dms/image/C5603AQF_Bbc8OPJppA/profile-displayphoto-shrink_400_400/0/1577748302235?e=1642636800&v=beta&t=S9VLy1dZK_haPe9-IJY2EJ3VlDxPT2dggsmMFzRli64",
             className = "rounded-circle img-fluid",
@@ -186,6 +231,27 @@ def main(app):
         align = "stretch"
     )
     
+    # Legislature Viz Section
+    legislature_vis_section = html.Div(
+        id="parent",
+        children=[
+            html.H1(
+                id="H1", 
+                children="Styling using HTML components",
+                style={'textAlign':'center', 'marginTop':40,'marginBottom':40}
+            ),
+            dcc.Dropdown(
+                id="party_dropdown",
+                options=[
+                    {"label": value, "value": value} for value in parties
+                ],
+                value="Green",
+                style={"width": 500}
+            ),
+            dcc.Graph(id="gender_plot")
+        [
+    )  
+          
     # Full Layout
     app_layout = dbc.Container(
         [
@@ -220,6 +286,8 @@ def main(app):
                                     dropdown_card,
                                 ],
                             ),
+                            # Temp Legislature Viz Section
+                            legislature_vis_section,
                             # Footer
                             dbc.Row(style = {"padding" : 40}),
                             FOOTER  

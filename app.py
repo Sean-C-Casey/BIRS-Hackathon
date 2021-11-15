@@ -102,7 +102,7 @@ def province_bill_pie_chart(selected_dropdown_value):
     return figure
 
 
-def main(app):
+def configure(app):
 
     global server
     ############ DATA ################
@@ -331,9 +331,12 @@ def main(app):
 
     # Run App
     app.layout = app_layout
-    server = app.server
-    app.run_server(debug=True)
+    return app
+    # server = app.server
+    # app.run_server(debug=True)
 
 
 if __name__ == "__main__":
-    main(app)
+    app = configure(app)
+    server = app.server
+    app.run_server(debug=True)

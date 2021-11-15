@@ -18,7 +18,6 @@ app = dash.Dash(
     external_stylesheets=[dbc.themes.FLATLY],
     title="Everybody Everywhere",
 )
-server = app.server
 
 ################# CALLBACKS AND GRAPHS ####################
 
@@ -335,3 +334,4 @@ def main(app):
 
 if __name__ == "__main__":
     main(app)
+    server = app.server

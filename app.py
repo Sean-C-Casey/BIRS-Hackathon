@@ -16,7 +16,7 @@ from Data import Legislators, Legislation
 app = dash.Dash(
     __name__,
     external_stylesheets=[dbc.themes.FLATLY],
-    title="Diversity in Legislation",
+    title="Everybody Everywhere",
 )
 server = app.server
 
@@ -150,116 +150,116 @@ def main(app):
         align="stretch",
     )
 
-    # Select Party Card
-    dropdown_party_selection_card = dbc.Col(
-        dbc.Card(
-            className="border-2 border-primary h-100",
-            children=html.Div(
-                className="card-body",
-                children=[
-                    html.Div(
-                        html.H5("Political Party", className="card-title text-light"),
-                        style={"padding": 5, "padding-left": 10},
-                        className="bg-primary rounded-top",
-                    ),
-                    dbc.Label("Select Party to Display:", className="card-text"),
-                    dbc.Row(
-                        dbc.Select(
-                            id="party_dropdown",
-                            options=[
-                                {"label": value, "value": value} for value in parties
-                            ],
-                        ),
-                        justify="center",
-                    ),
-                ],
-            ),
-        ),
-        width="auto",
-        align="stretch",
-    )
+    # # Select Party Card
+    # dropdown_party_selection_card = dbc.Col(
+    #     dbc.Card(
+    #         className="border-2 border-primary h-100",
+    #         children=html.Div(
+    #             className="card-body",
+    #             children=[
+    #                 html.Div(
+    #                     html.H5("Political Party", className="card-title text-light"),
+    #                     style={"padding": 5, "padding-left": 10},
+    #                     className="bg-primary rounded-top",
+    #                 ),
+    #                 dbc.Label("Select Party to Display:", className="card-text"),
+    #                 dbc.Row(
+    #                     dbc.Select(
+    #                         id="party_dropdown",
+    #                         options=[
+    #                             {"label": value, "value": value} for value in parties
+    #                         ],
+    #                     ),
+    #                     justify="center",
+    #                 ),
+    #             ],
+    #         ),
+    #     ),
+    #     width="auto",
+    #     align="stretch",
+    # )
 
-    # Single Select Card PLACEHOLDER
-    single_select_card = dbc.Col(
-        dbc.Card(
-            className="border-2 border-primary h-100",
-            children=html.Div(
-                className="card-body",
-                children=[
-                    html.Div(
-                        html.H5("PLACEHOLDER", className="card-title text-light"),
-                        style={"padding": 5, "padding-left": 10},
-                        className="bg-primary rounded-top",
-                    ),
-                    dbc.Label(
-                        "Some placeholder single-category card:", className="card-text"
-                    ),
-                    dbc.Row(
-                        html.Div(
-                            [
-                                dbc.RadioItems(
-                                    id="radios",
-                                    className="btn-group",
-                                    label_checked_class_name="active",
-                                    input_class_name="btn-check",
-                                    label_class_name="btn btn-outline-primary",
-                                    options=[
-                                        {"label": "Google", "value": "GOOG"},
-                                        {"label": "Apple", "value": "AAPL"},
-                                        {"label": "Amazon", "value": "AMZN"},
-                                    ],
-                                ),
-                                html.Div(id="output"),
-                            ],
-                            className="radio-group",
-                        ),
-                        justify="center",
-                    ),
-                ],
-            ),
-        ),
-        width="auto",
-        align="stretch",
-    )
+    # # Single Select Card PLACEHOLDER
+    # single_select_card = dbc.Col(
+    #     dbc.Card(
+    #         className="border-2 border-primary h-100",
+    #         children=html.Div(
+    #             className="card-body",
+    #             children=[
+    #                 html.Div(
+    #                     html.H5("PLACEHOLDER", className="card-title text-light"),
+    #                     style={"padding": 5, "padding-left": 10},
+    #                     className="bg-primary rounded-top",
+    #                 ),
+    #                 dbc.Label(
+    #                     "Some placeholder single-category card:", className="card-text"
+    #                 ),
+    #                 dbc.Row(
+    #                     html.Div(
+    #                         [
+    #                             dbc.RadioItems(
+    #                                 id="radios",
+    #                                 className="btn-group",
+    #                                 label_checked_class_name="active",
+    #                                 input_class_name="btn-check",
+    #                                 label_class_name="btn btn-outline-primary",
+    #                                 options=[
+    #                                     {"label": "Google", "value": "GOOG"},
+    #                                     {"label": "Apple", "value": "AAPL"},
+    #                                     {"label": "Amazon", "value": "AMZN"},
+    #                                 ],
+    #                             ),
+    #                             html.Div(id="output"),
+    #                         ],
+    #                         className="radio-group",
+    #                     ),
+    #                     justify="center",
+    #                 ),
+    #             ],
+    #         ),
+    #     ),
+    #     width="auto",
+    #     align="stretch",
+    # )
 
-    # Multi-Select Card PLACEHOLDER
-    multi_select_card = dbc.Col(
-        dbc.Card(
-            className="border-2 border-primary h-100",
-            children=html.Div(
-                className="card-body",
-                children=[
-                    html.Div(
-                        html.H5("PLACEHOLDER", className="card-title text-light"),
-                        style={"padding": 5, "padding-left": 10},
-                        className="bg-primary rounded-top",
-                    ),
-                    dbc.Label("Some multi-selector category:", className="card-text"),
-                    dbc.Row(
-                        html.Div(
-                            [
-                                dbc.Checklist(
-                                    id="switches-input",
-                                    switch=True,
-                                    value=[1],
-                                    options=[
-                                        {"label": "Google", "value": "GOOG"},
-                                        {"label": "Apple", "value": "AAPL"},
-                                        {"label": "Amazon", "value": "AMZN"},
-                                    ],
-                                ),
-                                html.Div(id="output2"),
-                            ],
-                            className="multi-group",
-                        ),
-                        justify="center",
-                    ),
-                ],
-            ),
-        ),
-        width="auto",
-        align="stretch",
-    )
+    # # Multi-Select Card PLACEHOLDER
+    # multi_select_card = dbc.Col(
+    #     dbc.Card(
+    #         className="border-2 border-primary h-100",
+    #         children=html.Div(
+    #             className="card-body",
+    #             children=[
+    #                 html.Div(
+    #                     html.H5("PLACEHOLDER", className="card-title text-light"),
+    #                     style={"padding": 5, "padding-left": 10},
+    #                     className="bg-primary rounded-top",
+    #                 ),
+    #                 dbc.Label("Some multi-selector category:", className="card-text"),
+    #                 dbc.Row(
+    #                     html.Div(
+    #                         [
+    #                             dbc.Checklist(
+    #                                 id="switches-input",
+    #                                 switch=True,
+    #                                 value=[1],
+    #                                 options=[
+    #                                     {"label": "Google", "value": "GOOG"},
+    #                                     {"label": "Apple", "value": "AAPL"},
+    #                                     {"label": "Amazon", "value": "AMZN"},
+    #                                 ],
+    #                             ),
+    #                             html.Div(id="output2"),
+    #                         ],
+    #                         className="multi-group",
+    #                     ),
+    #                     justify="center",
+    #                 ),
+    #             ],
+    #         ),
+    #     ),
+    #     width="auto",
+    #     align="stretch",
+    # )
 
     # Full Layout
     app_layout = dbc.Container(

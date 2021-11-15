@@ -335,7 +335,10 @@ def configure(app):
     # app.run_server(debug=True)
 
 
+# Temp debugging
+
+app = configure(app)
+server = app.server
+
 if __name__ == "__main__":
-    app = configure(app)
-    server = app.server
     app.run_server(debug=True)

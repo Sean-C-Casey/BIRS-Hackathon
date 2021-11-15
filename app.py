@@ -18,6 +18,7 @@ app = dash.Dash(
     external_stylesheets=[dbc.themes.FLATLY],
     title="Everybody Everywhere",
 )
+server = None
 
 ################# CALLBACKS AND GRAPHS ####################
 
@@ -103,6 +104,7 @@ def province_bill_pie_chart(selected_dropdown_value):
 
 def main(app):
 
+    global server
     ############ DATA ################
 
     # Fetch Data
@@ -329,9 +331,9 @@ def main(app):
 
     # Run App
     app.layout = app_layout
+    server = app.server
     app.run_server(debug=True)
 
 
 if __name__ == "__main__":
     main(app)
-    server = app.server

@@ -104,7 +104,6 @@ def province_bill_pie_chart(selected_dropdown_value):
 
 def configure(app):
 
-    global server
     ############ DATA ################
 
     # Fetch Data

@@ -308,7 +308,7 @@ def configure(app):
                             ),
                         ],
                         align="center",
-                        width=4,
+                        md=4,
                     ),
                     # Content
                     dbc.Col(
@@ -318,7 +318,7 @@ def configure(app):
                             # Pie Vis
                             dcc.Graph(id="province_bill_pie"),
                         ],
-                        width=8,
+                        md=8,
                     ),
                     # Footer
                     dbc.Row(style={"padding": 40}),

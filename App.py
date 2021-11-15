@@ -18,7 +18,7 @@ app = dash.Dash(
     external_stylesheets=[dbc.themes.FLATLY],
     title="Diversity in Legislation",
 )
-
+server = app.server
 
 ################# CALLBACKS AND GRAPHS ####################
 
